@@ -1,3 +1,5 @@
+%global releaseno 60
+
 %if 0%{?fedora} || 0%{?rhel} >= 9
 %bcond_without flexiblas
 %endif
@@ -9,16 +11,16 @@
 
 Name:           ncl
 Version:        6.6.2
-Release:        59
+Release:        %{releaseno}
 Summary:        NCAR Command Language and NCAR Graphics
 
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.ncl.ucar.edu
 Source0:        https://github.com/NCAR/ncl/archive/%{version}/%{name}-%{version}.tar.gz
-Source1:        Site.local.ncl
-Source2:        ncarg.csh
-Source3:        ncarg.sh
+Source1:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/Site.local.ncl
+Source2:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncarg.csh
+Source3:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncarg.sh
 # Fails to build on ppc64le with error: detected recursion whilst expanding macro ‘vector’
 ExcludeArch:    %{ix86} ppc64le
 
@@ -36,40 +38,40 @@ ExcludeArch:    %{ix86} ppc64le
 #
 # install paths are set up in Project. Paths used in code are also in 
 # Project, in NGENV_DESCRIPT.
-Patch0:         ncl-5.1.0-paths.patch
+Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.1.0-paths.patch
 # https://github.com/NCAR/ncl/pull/134
-Patch1:         ncarg-4.4.1-deps.patch
-Patch2:         ncl-5.1.0-ppc64.patch
+Patch1:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncarg-4.4.1-deps.patch
+Patch2:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.1.0-ppc64.patch
 # Add needed -lm to ictrans build, remove unneeded -lrx -lidn -ldl from ncl
-Patch3:         ncl-libs.patch
+Patch3:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-libs.patch
 # -Werror=format-security
 # https://github.com/NCAR/ncl/pull/108
-Patch4:         ncl-format.patch
+Patch4:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-format.patch
 # Fix use of BOZ constans
-Patch5:         ncl-boz.patch
+Patch5:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-boz.patch
 # Change link order of g2clib and gdal to work around gdal's modified g2_getfld()
 # https://bugzilla.redhat.com/show_bug.cgi?id=1856959
 # https://github.com/OSGeo/gdal/issues/2775
-Patch6:         ncl-gdal.patch
+Patch6:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-gdal.patch
 # Drop unused headers removed from hdf 4.3
 # https://github.com/NCAR/ncl/pull/209
-Patch7:         ncl-hdf4.3.patch
+Patch7:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-hdf4.3.patch
 # Fixes for gcc15
-Patch8:         ncl-gcc15.patch
+Patch8:         https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-gcc15.patch
 # don't have the installation target depends on the build target since
 # for library it implies running ranlib and modifying the library timestamp
-Patch10:        ncl-5.0.0-no_install_dep.patch
+Patch10:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.0.0-no_install_dep.patch
 # put install and build rules before script rules such that the default rule
 # is all
 # https://github.com/NCAR/ncl/pull/135
-Patch11:        ncl-5.0.0-build_n_scripts.patch
-Patch12:        ncl-5.1.0-netcdff.patch
+Patch11:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.0.0-build_n_scripts.patch
+Patch12:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.1.0-netcdff.patch
 # https://github.com/NCAR/ncl/pull/136
-Patch13:        ncl-5.1.0-includes.patch
+Patch13:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.1.0-includes.patch
 # Add Fedora secondary arches
-Patch16:        ncl-5.2.1-secondary.patch
+Patch16:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-5.2.1-secondary.patch
 # Fix build with proj8
-Patch17:        ncl-proj8.patch
+Patch17:        https://raw.githubusercontent.com/ARPA-SIMC/ncl-rpm/v%{version}-%{releaseno}/ncl-proj8.patch
 
 BuildRequires:  /bin/csh
 BuildRequires:  gcc-c++
@@ -372,6 +374,9 @@ done
 
 
 %changelog
+* Thu Oct 08 2026 Daniele Branchini  <dbranchini@arpae.it> - 6.6.2-60
+- Fixed source and patch path, added missing file
+
 * Thu Oct 08 2026 Daniele Branchini  <dbranchini@arpae.it> - 6.6.2-59
 - Fixes by Paolo Patruno for EPEL10
 
